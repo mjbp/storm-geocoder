@@ -1,7 +1,3 @@
-#Component Name
+#Storm Google Maps
 
-One line summary
-
-##API
-
-###Options
+Google Maps API abstraction layer
