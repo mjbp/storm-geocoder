@@ -49,10 +49,10 @@ gulp.task('js:async', function() {
         .pipe(header(banner, {pkg : pkg}))
 		.pipe(browserify({
           insertGlobals : true,
+          standalone: 'StormGoogleMaps',
           debug : true
         }))
-		.pipe(uglify())
-  		.pipe(rename({suffix: '.async.min'}))
+  		.pipe(rename({suffix: '.async'}))
 		.pipe(gulp.dest('dist'));
 });
 gulp.task('js', ['js:copy', 'js:async']);

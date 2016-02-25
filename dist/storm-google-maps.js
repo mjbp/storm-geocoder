@@ -1,6 +1,6 @@
 /**
  * @name storm-google-maps: Google Maps API abstraction layer
- * @version 0.1.0: Thu, 25 Feb 2016 12:03:44 GMT
+ * @version 0.1.0: Thu, 25 Feb 2016 14:34:13 GMT
  * @author stormid
  * @license MIT
  */(function (root, factory) {

@@ -1,8 +1,7 @@
 var STORM = (function(w, d) {
         'use strict';
 
-        var StormGoogleMaps = require('./libs/storm-google-maps'),
-            init = function() {
+        var init = function() {
                 StormGoogleMaps.init(null, {
                     cb: function(){
                         //this.find('Boston');
