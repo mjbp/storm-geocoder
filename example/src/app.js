@@ -1,53 +1,44 @@
-var STORM = (function(w, d) {
-        'use strict';
+import Geocoder from './libs/storm-geocoder';
 
-        var STATUS_CODES = {
-                ZERO_RESULTS: 'ZERO_RESULTS'
-            },
-            Geocoder = require('./libs/storm-geocoder').init(),
-            init = function() {
-                var resultsWrapperTemplate = '<ul class="js-results">{{results}}</ul>',
-                    resultTemplate = '<li>{{result}}</li>';
+const onDOMContentLoadedTasks = [() => {
+	let form = document.querySelector('.js-geocode'),
+		render = data => {
+			form.insertAdjacentHTML('afterend', `<table class="js-results results">${data.map(row => {
+				return `<tr>
+					<td>${row.formatted_address}</td>
+					<td>${String(row.geometry.location.lat()).substr(0, 5)}, ${String(row.geometry.location.lng()).substr(0, 5)}</td>
+				</tr>`;
+			}).join('')}</table>`);
+		};
 
-                d.querySelector('.js-geocode').addEventListener('submit', function(e){
-                    e.preventDefault();
-                    Geocoder.find(this.q.value, function(err, res){
-                        if(err) {
-                            if(err === STATUS_CODES.ZERO_RESULTS) {
-                                var msg = '<p class="js-results">Nothing found by Google</p>';
-                                if(!!d.querySelector('.js-results')) {
-                                    d.querySelector('.js-results').innerHTML = msg;
-                                } else {
-                                    d.querySelector('.js-geocode').insertAdjacentHTML('afterend', msg);
-                                }
-                            }
-                            console.warn(err);
-                            return;
-                        }
-                        //this is what you get back from Google
-                        console.log(res);
+	Geocoder
+		.init()
+		.then(geocoder => {
+			console.log(geocoder);
+			form.addEventListener('submit', e => {
+				e.preventDefault();
+				/*
+				geocoder.find({ address: document.querySelector('#q').value }, (res, status) => {
+					console.log(status, res);
+				});
+				*/
 
-                        //You could output part of it like this
-                        if(!!d.querySelector('.js-results')) {
-                            d.querySelector('.js-results').innerHTML = res.reduce(function(prev, curr){
-                                return prev + resultTemplate.split('{{result}}').join(curr.formatted_address);
-                            }, '');
-                        } else {
-                            d.querySelector('.js-geocode').insertAdjacentHTML('afterend', resultsWrapperTemplate.split('{{results}}').join(res.reduce(function(prev, curr){
-                                return prev + resultTemplate.split('{{result}}').join(curr.formatted_address);
-                            }, '')));
-                        }
+				document.querySelector('.js-results') && form.parentNode.removeChild(document.querySelector('.js-results'));
 
-                    });
-                }, false);
-            };
-
-        return {
-            init: init
-        };
-
-    })(window, document, undefined);
-
-window.STORM = STORM;
-
-if('addEventListener' in window) window.addEventListener('DOMContentLoaded', STORM.init, false);
+				geocoder
+					.promise(document.querySelector('#q').value)
+					.then(res => {
+						render(res);
+					})
+					.catch(err => {
+						form.insertAdjacentHTML('afterend', `<div class="js-results results">${err}</div>`);
+						console.log(err);
+					});
+			});
+		})
+		.catch(err => {
+			console.log(err);
+		});
+}];
+	
+if('addEventListener' in window) window.addEventListener('DOMContentLoaded', () => { onDOMContentLoadedTasks.forEach((fn) => fn()); });

@@ -1,101 +1,45 @@
 /**
  * @name storm-geocoder: Google Maps API geocoder loader and wrapper
- * @version 0.1.0: Wed, 22 Jun 2016 13:37:00 GMT
+ * @version 0.1.2: Wed, 11 Jan 2017 16:29:44 GMT
  * @author stormid
  * @license MIT
- */(function(root, factory) {
-    if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.StormGeocoder = factory();
-  }
-}(this, function() {
-    'use strict';
+ */
+import Load from 'storm-load';
 
-    var MAX_ATTEMPTS = 250,
-        instance,
-        loadScript = function(src) {
-            var script = document.createElement('script'),
-                timer = window.setTimeout(function() {
-                    console.warn('Script ' + src + ' failed to load in time.');
-                }, 5000);
-            script.src = src;
-            script.onload = function() {
-                window.clearTimeout(timer);
-            }.bind(this);
-            document.body.appendChild(script);
-        },
-        defaults = {
-            key: null
-        },
-        StormGeocoder = {
-            init: function (fn) {
-                if (!window.google) { 
-                    this.loadAPI(fn);
-                    console.log(this);
-                    return this;
-                }
-                else { fn.apply(this, arguments); }
-            },
-            loadAPI: function (fn) {
-                var API = 'http://maps.googleapis.com/maps/api/js?callback=GoogleMapsAPILoaded' + (!!this.settings.key && '&key=' + this.settings.key || ''),
-                    GoogleMapsAPILoaded = function () {
-                        delete window.GoogleMapsAPILoaded;
-                        this.settings.cb && this.settings.cb.apply(this, arguments);
-                    }.bind(this);
+const CONSTANTS = {
+		GMAPI: 'http://maps.googleapis.com/maps/api/js?callback=$__GMAPILoaded__$'
+	},
+	defaults = {
+		key: null
+	},
+	StormGeocoder = {
+		init(){
+			this.mapsGeocoder = new window.google.maps.Geocoder();
+			this.find = this.mapsGeocoder.geocode;
+			return this;
+		},
+		promise(q){
+			return new Promise((resolve, reject) => {
+				this.find({ address: q }, (res, status) => {
+					if(status !== google.maps.GeocoderStatus.OK) return reject(`Google Maps API status: ${status.split('_').join(' ').toLowerCase()}`);
+					resolve(res);
+				});
+			});
+		}
+	};
 
-                window.GoogleMapsAPILoaded = GoogleMapsAPILoaded;
+const run = () => delete window.$__GMAPILoaded__$;
 
-                loadScript.call(this, API);
-            },
-            await: function(cb, fn){
-                var attempts = 0,
-                    timer = function(){
-                        var timeout = window.setTimeout(function(){
-                                attempts++;
-                                window.clearInterval(timeout);
-                                if(attempts === MAX_ATTEMPTS) {
-                                    cb('Google Maps API has timed out', null);
-                                    return;
-                                }
-                                if(!window.google){
-                                    timer();
-                                } else {
-                                    fn.apply(this);
-                                }
-                            }.bind(this), 16);
-                    };
-                timer();
-            },
-            find: function(q, cb){
-                var fn = function(){
-                        var geocoder = new window.google.maps.Geocoder();
-                    
-                        geocoder.geocode({ 
-                            address: q
-                        }, function(res, status){
-                            if (status !== global.google.maps.GeocoderStatus.OK) { 
-                                cb(status, res);
-                                return;
-                            }
-                            cb(null, res);
-                        });
-                };
-                if(!window.google) {
-                    this.await(cb, fn);
-                } else {
-                    fn();
-                }
-                
-            }
-        };
+const init = (sel, locs, opts) => {
+	window.$__GMAPILoaded__$ = run;
+	
+	return Load(CONSTANTS.GMAPI + (!opts || !opts.key ? '' : '&key=' + opts.key))
+		.then(() => {
+			return Object.assign(Object.create(StormGeocoder), {
+				settings: Object.assign({}, defaults, opts)
+			}).init();
+		})
+		.catch(e => console.log(`Script loading error: ${e.message}`));
+};
 
-    function init(opts) {
-        return Object.assign(Object.create(StormGeocoder), {
-            settings: Object.assign({}, defaults, opts)
-        }).init();
-    }
-
-    return { init: init };
-
- }));
+export default { init };
