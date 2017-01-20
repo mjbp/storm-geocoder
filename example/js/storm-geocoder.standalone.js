@@ -1,74 +1,7 @@
 /**
  * @name storm-geocoder: Google Maps API geocoder loader and wrapper
- * @version 0.1.2: Wed, 11 Jan 2017 16:29:44 GMT
+ * @version 0.1.2: Fri, 20 Jan 2017 16:39:50 GMT
  * @author stormid
  * @license MIT
  */
-(function(root, factory) {
-   var mod = {
-       exports: {}
-   };
-   if (typeof exports !== 'undefined'){
-       mod.exports = exports
-       factory(mod.exports)
-       module.exports = mod.exports.default
-   } else {
-       factory(mod.exports);
-       root.StormGeocoder = mod.exports.default
-   }
-
-}(this, function(exports) {
-   'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _stormLoad = require('storm-load');
-
-var _stormLoad2 = _interopRequireDefault(_stormLoad);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CONSTANTS = {
-	GMAPI: 'http://maps.googleapis.com/maps/api/js?callback=$__GMAPILoaded__$'
-},
-    defaults = {
-	key: null
-},
-    StormGeocoder = {
-	init: function init() {
-		this.mapsGeocoder = new window.google.maps.Geocoder();
-		this.find = this.mapsGeocoder.geocode;
-		return this;
-	},
-	promise: function promise(q) {
-		var _this = this;
-
-		return new Promise(function (resolve, reject) {
-			_this.find({ address: q }, function (res, status) {
-				if (status !== google.maps.GeocoderStatus.OK) return reject('Google Maps API status: ' + status.split('_').join(' ').toLowerCase());
-				resolve(res);
-			});
-		});
-	}
-};
-
-var run = function run() {
-	return delete window.$__GMAPILoaded__$;
-};
-
-var init = function init(sel, locs, opts) {
-	window.$__GMAPILoaded__$ = run;
-
-	return (0, _stormLoad2.default)(CONSTANTS.GMAPI + (!opts || !opts.key ? '' : '&key=' + opts.key)).then(function () {
-		return Object.assign(Object.create(StormGeocoder), {
-			settings: Object.assign({}, defaults, opts)
-		}).init();
-	}).catch(function (e) {
-		return console.log('Script loading error: ' + e.message);
-	});
-};
-
-exports.default = { init: init };;
-}));
+!function e(t,n,o){function r(u,a){if(!n[u]){if(!t[u]){var c="function"==typeof require&&require;if(!a&&c)return c(u,!0);if(i)return i(u,!0);var s=new Error("Cannot find module '"+u+"'");throw s.code="MODULE_NOT_FOUND",s}var d=n[u]={exports:{}};t[u][0].call(d.exports,function(e){var n=t[u][1][e];return r(n?n:e)},d,d.exports,e,t,n,o)}return n[u].exports}for(var i="function"==typeof require&&require,u=0;u<o.length;u++)r(o[u]);return r}({1:[function(e,t,n){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var o=function(e){return new Promise(function(t,n){var o=document.createElement("script");o.src=e,o.onload=o.onreadystatechange=function(){this.readyState&&"complete"!==this.readyState||t()},o.onerror=o.onabort=n,document.head.appendChild(o)})},r=n.synchronous=function(e){return new Promise(function(t,n){var r=function r(){return e.length?void o(e.shift()).then(r).catch(n):t()};r()})};n.default=function(e){var t=!(arguments.length>1&&void 0!==arguments[1])||arguments[1];return e=[].concat(e),t?Promise.all(e.map(function(e){return o(e)})):r(e)}},{}],2:[function(e,t,n){"use strict";function o(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(n,"__esModule",{value:!0});var r=e("storm-load"),i=o(r),u={GMAPI:"http://maps.googleapis.com/maps/api/js?callback=$__GMAPILoaded__$"},a={key:null},c={init:function(){return this.mapsGeocoder=new window.google.maps.Geocoder,this.find=this.mapsGeocoder.geocode,this},promise:function(e){var t=this;return new Promise(function(n,o){t.find({address:e},function(e,t){return t!==google.maps.GeocoderStatus.OK?o("Google Maps API status: "+t.split("_").join(" ").toLowerCase()):void n(e)})})}},s=function(){return delete window.$__GMAPILoaded__$},d=function(e,t,n){return window.$__GMAPILoaded__$=s,(0,i.default)(u.GMAPI+(n&&n.key?"&key="+n.key:"")).then(function(){return Object.assign(Object.create(c),{settings:Object.assign({},a,n)}).init()}).catch(function(e){return console.log("Script loading error: "+e.message)})};n.default={init:d}},{"storm-load":1}]},{},[2]);
