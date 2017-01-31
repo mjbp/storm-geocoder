@@ -25,18 +25,6 @@
     "test": "istanbul cover _mocha --report lcovonly -- -R spec && codecov",
     "test:watch": "NODE_ENV=test mocha --watch"
   },
-  "browserify": {
-    "transform": [
-      [
-        "babelify",
-        {
-          "presets": [
-            "es2015"
-          ]
-        }
-      ]
-    ]
-  },
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.7.2",
@@ -52,6 +40,7 @@
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
+    "gulp-rollup": "^2.10.0",
     "gulp-uglify": "^2.0.0",
     "gulp-wrap-umd": "^0.2.1",
     "istanbul": "^1.1.0-alpha.1",
@@ -59,6 +48,7 @@
     "jsdom-global": "^2.1.0",
     "mocha": "^3.1.2",
     "object-assign": "^4.0.1",
+    "rollup-plugin-node-resolve": "^2.0.0",
     "run-sequence": "^1.1.0",
     "should": "^11.1.1",
     "vinyl-buffer": "^1.0.0",

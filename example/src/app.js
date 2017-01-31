@@ -1,4 +1,4 @@
-import Geocoder from './libs/storm-geocoder';
+import Load from 'storm-load';
 
 const onDOMContentLoadedTasks = [() => {
 	let form = document.querySelector('.js-geocode'),
@@ -11,17 +11,40 @@ const onDOMContentLoadedTasks = [() => {
 			}).join('')}</table>`);
 		};
 
+		Load('./js/storm-geocoder.standalone.js')
+		.then(() => {
+			StormGeocoder
+			.init()
+			.then(geocoder => {
+				console.log(geocoder);
+				form.addEventListener('submit', e => {
+					e.preventDefault();
+
+					document.querySelector('.js-results') && form.parentNode.removeChild(document.querySelector('.js-results'));
+
+					geocoder
+						.promise(document.querySelector('#q').value)
+						.then(res => {
+							render(res);
+						})
+						.catch(err => {
+							form.insertAdjacentHTML('afterend', `<div class="js-results results">${err}</div>`);
+							console.log(err);
+						});
+				});
+			})
+			.catch(err => {
+				console.log(err);
+			});
+		});
+
+		/*
 	Geocoder
 		.init()
 		.then(geocoder => {
 			console.log(geocoder);
 			form.addEventListener('submit', e => {
 				e.preventDefault();
-				/*
-				geocoder.find({ address: document.querySelector('#q').value }, (res, status) => {
-					console.log(status, res);
-				});
-				*/
 
 				document.querySelector('.js-results') && form.parentNode.removeChild(document.querySelector('.js-results'));
 
@@ -39,6 +62,7 @@ const onDOMContentLoadedTasks = [() => {
 		.catch(err => {
 			console.log(err);
 		});
+		*/
 }];
 	
 if('addEventListener' in window) window.addEventListener('DOMContentLoaded', () => { onDOMContentLoadedTasks.forEach((fn) => fn()); });
