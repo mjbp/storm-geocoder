@@ -4,7 +4,7 @@
 [![codecov.io](http://codecov.io/github/mjbp/storm-geocoder/coverage.svg?branch=master)](http://codecov.io/github/mjbp/storm-geocoder?branch=master)
 [![npm version](https://badge.fury.io/js/storm-geocoder.svg)](https://badge.fury.io/js/storm-geocoder)
 
-Light promisified Google Maps API geocoder loader and abstraction layer
+Light promisified Google Maps API geocoder loader and abstraction layer.
 
 ##Example
 [https://mjbp.github.io/storm-geocoder](https://mjbp.github.io/storm-geocoder)
@@ -61,6 +61,7 @@ Load('/content/js/async/storm-geocoder.standalone.js')
 ```
 
 ###Options
+Your own Google Maps API key will be required
 ```
     defaults = {
         key: null
@@ -78,7 +79,7 @@ This is module has both es6 and es5 distributions. The es6 version should be use
 The es5 version depends unpon Object.assign, element.classList, and Promises so all evergreen browsers are supported out of the box, ie9+ is supported with polyfills. ie8+ will work with even more polyfils for Array functions and eventListeners.
 
 ##Dependencies
-None
+Import storm-load(https://mjbp.github.io/storm-load)
 
 ##License
 MIT
