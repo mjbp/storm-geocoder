@@ -164,7 +164,7 @@
         <pre><code class="language-js">import Geocoder from 'storm-geocoder';
             
 Geocoder
-    .init()
+    .init({key: 'Your key'})
     .then(geocoder => {
         //now you can use any features of the Google Maps API geocoder
         //https://developers.google.com/maps/documentation/javascript/geocoding
@@ -172,12 +172,13 @@ Geocoder
         document.querySelector('.js-geocode').addEventListener('submit', e => {
             e.preventDefault();
 
+            //remove any results that are already on the page
             document.querySelector('.js-results') && form.parentNode.removeChild(document.querySelector('.js-results'));
 
             geocoder
                 .promise(document.querySelector('#q').value)
                 .then(res => {
-                    //render res...
+                    //render res to .js-results as you see fit
                 });
         });
     })
@@ -187,10 +188,10 @@ Geocoder
         <p>Or async using storm-load.js, add the .standalone file to your project, then initialise using the global name:</p>
         <pre><code class="language-js">Load('/content/js/async/storm-geocoder.standalone.js')
 .then(() => {
-    StormGeocdoer
-        .init()
+    StormGeocoder
+        .init({key: 'Your key'})
         .then(geocoder => {
-            //use the geocder
+            //use the geocoder
     })
     .catch(err => {
         console.log(err);
