@@ -1,4 +1,4 @@
-#Storm Geocoder
+# Storm Geocoder
 
 [![Build Status](https://travis-ci.org/mjbp/storm-geocoder.svg?branch=master)](https://travis-ci.org/mjbp/storm-geocoder)
 [![codecov.io](http://codecov.io/github/mjbp/storm-geocoder/coverage.svg?branch=master)](http://codecov.io/github/mjbp/storm-geocoder?branch=master)
@@ -6,10 +6,10 @@
 
 Light promisified Google Maps API geocoder loader and abstraction layer. For the API documentation see https://developers.google.com/maps/documentation/javascript/geocoding
 
-##Example
+## Example
 [https://mjbp.github.io/storm-geocoder](https://mjbp.github.io/storm-geocoder)
 
-##Usage
+## Usage
 JS
 ```
 npm install -S storm-geocoder
@@ -60,7 +60,7 @@ Load('/content/js/async/storm-geocoder.standalone.js')
     });
 ```
 
-###Options
+### Options
 Your own Google Maps API key will be required
 ```
     defaults = {
@@ -68,20 +68,20 @@ Your own Google Maps API key will be required
     }
 ```
 
-##Tests
+## Tests
 ```
 npm run test
 ```
 
-##Browser support
+## Browser support
 This is module has both es6 and es5 distributions. The es6 version should be used in a workflow that transpiles.
 
 The es5 version depends unpon Object.assign, element.classList, and Promises so all evergreen browsers are supported out of the box, ie9+ is supported with polyfills. ie8+ will work with even more polyfils for Array functions and eventListeners.
 
-##Dependencies
+## Dependencies
 Google Maps JS API
 
 Import storm-load(https://mjbp.github.io/storm-load)
 
-##License
+## License
 MIT
