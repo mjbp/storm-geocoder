@@ -1,6 +1,6 @@
 /**
- * @name storm-geocoder: Google Maps API geocoder loader and wrapper
- * @version 0.1.2: Mon, 13 Feb 2017 11:59:03 GMT
+ * @name storm-geocoder: Google Maps API geocoder loader and abstraction layer
+ * @version 1.0.0: Fri, 17 Mar 2017 17:04:09 GMT
  * @author stormid
  * @license MIT
  */

@@ -163,7 +163,9 @@ gulp.task('deploy', ['example'], function() {
  *  Task collection API
  ************************/
 gulp.task('default', ['server']);
+
 gulp.task('serve', ['server']);
 gulp.task('build', function() {
     runSequence('js', 'copy', 'example');
 });
+

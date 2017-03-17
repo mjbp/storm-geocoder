@@ -1,5 +1,9 @@
 node_modules
 .DS_Store
 npm-debug.log
+<<<<<<< HEAD
 .publish
 coverage
+=======
+.publish
+>>>>>>> 56dcce2d469d7a28344c60ee8acb6c1d34bbb20b
