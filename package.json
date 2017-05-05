@@ -1,6 +1,6 @@
 {
   "name": "storm-geocoder",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Google Maps API geocoder loader and abstraction layer",
   "author": "stormid",
   "license": "MIT",
