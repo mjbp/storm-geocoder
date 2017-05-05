@@ -1,6 +1,6 @@
 /**
  * @name storm-geocoder: Google Maps API geocoder loader and abstraction layer
- * @version 1.0.0: Fri, 17 Mar 2017 17:04:09 GMT
+ * @version 1.0.2: Fri, 05 May 2017 16:37:47 GMT
  * @author stormid
  * @license MIT
  */
@@ -25,14 +25,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * @name storm-load: Lightweight promise-based script loader
- * @version 0.3.1: Wed, 11 Jan 2017 12:57:30 GMT
+ * @version 0.5.1: Fri, 10 Mar 2017 17:30:13 GMT
  * @author stormid
  * @license MIT
  */
 var create = function create(url) {
+	var async = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
 	return new Promise(function (resolve, reject) {
 		var s = document.createElement('script');
 		s.src = url;
+		s.async = async;
 		s.onload = s.onreadystatechange = function () {
 			if (!this.readyState || this.readyState === 'complete') resolve();
 		};
@@ -45,7 +48,7 @@ var synchronous = function synchronous(urls) {
 	return new Promise(function (resolve, reject) {
 		var next = function next() {
 			if (!urls.length) return resolve();
-			create(urls.shift()).then(next).catch(reject);
+			create(urls.shift(), false).then(next).catch(reject);
 		};
 		next();
 	});
@@ -62,13 +65,11 @@ var Load = function Load(urls) {
 	}));
 };
 
-var CONSTANTS = {
-	GMAPI: 'http://maps.googleapis.com/maps/api/js?callback=$__GMAPILoaded__$'
-};
 var defaults = {
 	key: null
 };
-var StormGeocoder = {
+
+var componentPrototype = {
 	init: function init() {
 		this.mapsGeocoder = new window.google.maps.Geocoder();
 		this.find = this.mapsGeocoder.geocode;
@@ -86,23 +87,24 @@ var StormGeocoder = {
 	}
 };
 
+var GMAPI = 'http://maps.googleapis.com/maps/api/js?callback=$__GMAPILoaded__$';
 var run = function run() {
 	return delete window.$__GMAPILoaded__$;
 };
 
-var init = function init(sel, locs, opts) {
+var init = function init(settings) {
 	window.$__GMAPILoaded__$ = run;
 
-	return Load(CONSTANTS.GMAPI + (!opts || !opts.key ? '' : '&key=' + opts.key)).then(function () {
-		return Object.assign(Object.create(StormGeocoder), {
-			settings: Object.assign({}, defaults, opts)
+	return Load(GMAPI + (!settings || !settings.key ? '' : '&key=' + settings.key)).then(function () {
+		return Object.assign(Object.create(componentPrototype), {
+			settings: Object.assign({}, defaults, settings)
 		}).init();
 	}).catch(function (e) {
 		return console.log('Script loading error: ' + e.message);
 	});
 };
 
-var stormGeocoder = { init: init };
+var index = { init: init };
 
-exports.default = stormGeocoder;;
+exports.default = index;;
 }));
